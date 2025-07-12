@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "217072811308",
+    "project_id": "persistent-login-8837b",
+    "storage_bucket": "persistent-login-8837b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217072811308:android:d46ed909b84471b9a58089",
+        "android_client_info": {
+          "package_name": "com.example.flutter_persistent_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKW97ebAYEhiDtrg7q4goPKltOEgBK4T4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
