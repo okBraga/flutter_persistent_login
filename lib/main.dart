@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_persistent_login/auth_gate.dart';
 import 'package:flutter_persistent_login/core/di/injection.dart';
 import 'package:flutter_persistent_login/core/routes/app_routes.dart';
 import 'package:flutter_persistent_login/core/styles/theme.dart';
+import 'package:flutter_persistent_login/features/app/auth_gate.dart';
 import 'package:flutter_persistent_login/firebase_options.dart';
 import 'package:flutter_persistent_login/features/home/presentation/pages/home_page.dart';
 import 'package:flutter_persistent_login/features/login/presentation/pages/login_page.dart';
