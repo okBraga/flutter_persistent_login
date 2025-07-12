@@ -123,8 +123,8 @@ lib/
 ## 👨‍💻 Autor
 
 **Seu Nome**
-- LinkedIn: [Seu LinkedIn](https://linkedin.com/in/seu-perfil)
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
+- LinkedIn: [okBraga](https://www.linkedin.com/in/okbraga/)
+- GitHub: [okBraga](https://github.com/okBraga)
 
 ---
 
