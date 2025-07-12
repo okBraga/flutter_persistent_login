@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_persistent_login/core/domain/entity/user_entity.dart';
+import 'package:flutter_persistent_login/helpers/auth_error_messages.dart';
 import 'package:injectable/injectable.dart';
 import 'package:equatable/equatable.dart';
 import '../../../core/domain/repository/firebase_auth_repository.dart';
@@ -15,11 +15,7 @@ class LoginInitial extends LoginState {}
 
 class LoginLoading extends LoginState {}
 
-class LoginSuccess extends LoginState {
-  final UserEntity user;
-
-  const LoginSuccess(this.user);
-}
+class LoginSuccess extends LoginState {}
 
 class LoginError extends LoginState {
   final String message;
@@ -41,10 +37,11 @@ class LoginCubit extends Cubit<LoginState> {
 
     try {
       final user = await _authDataSource.signIn(email, password);
-      emit(LoginSuccess(user));
-    } catch (e) {
+      emit(LoginSuccess());
+    } on AuthenticationException catch (e) {
+      final errorMessage = mapErrorMessage(e.code);
       emit(
-        LoginError('Erro ao fazer login. Verifique suas credenciais e tente novamente.'),
+        LoginError(errorMessage),
       );
     }
   }

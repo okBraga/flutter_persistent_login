@@ -4,24 +4,24 @@ import 'package:flutter_persistent_login/core/data/datasource/remote/user_remote
 import 'package:flutter_persistent_login/core/domain/entity/user_entity.dart';
 import 'package:injectable/injectable.dart';
 
-/*
-email-already-in-use:
-Thrown if there already exists an account with the given email address.
-invalid-email:
-Thrown if the email address is not valid.
-operation-not-allowed:
-Thrown if email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.
-weak-password:
-Thrown if the password is not strong enough.
-too-many-requests:
-Thrown if the user sent too many requests at the same time, for security the api will not allow too many attempts at the same time, user will have to wait for some time
-user-token-expired:
-Thrown if the user is no longer authenticated since his refresh token has been expired
-network-request-failed:
-Thrown if there was a network request error, for example the user doesn't have internet connection
- */
+AuthErrorCode mapAuthenticationErrorCode(String code) {
+  return switch (code) {
+    'invalid-email' => AuthErrorCode.invalidEmail,
+    'user-disabled' => AuthErrorCode.userDisabled,
+    'user-not-found' => AuthErrorCode.userNotFound,
+    'wrong-password' => AuthErrorCode.wrongPassword,
+    'too-many-requests' => AuthErrorCode.tooManyRequests,
+    'user-token-expired' => AuthErrorCode.userTokenExpired,
+    'network-request-failed' => AuthErrorCode.networkRequestFailed,
+    'invalid-credential' => AuthErrorCode.invalidCredential,
+    'operation-not-allowed' => AuthErrorCode.operationNotAllowed,
+    'email-already-in-use' => AuthErrorCode.emailAlreadyInUse,
+    'weak-password' => AuthErrorCode.weakPassowrd,
+    _ => AuthErrorCode.unknown,
+  };
+}
 
-enum LoginErrorCode {
+enum AuthErrorCode {
   invalidEmail,
   userDisabled,
   userNotFound,
@@ -31,30 +31,15 @@ enum LoginErrorCode {
   networkRequestFailed,
   invalidCredential,
   operationNotAllowed,
-  unknown,
-}
-
-enum SignUpErrorCode {
   emailAlreadyInUse,
-  invalidEmail,
-  operationNotAllowed,
   weakPassowrd,
-  tooManyRequests,
-  userTokenExpired,
-  networkRequestFailed,
   unknown,
 }
 
-class LoginException implements Exception {
-  final LoginErrorCode code;
+class AuthenticationException implements Exception {
+  final AuthErrorCode code;
 
-  LoginException({required this.code});
-}
-
-class SignUpException implements Exception {
-  final SignUpErrorCode code;
-
-  SignUpException({required this.code});
+  AuthenticationException({required this.code});
 }
 
 abstract class AuthRepository {
@@ -92,20 +77,9 @@ class FirebaseAuthRepository implements AuthRepository {
 
       return user;
     } on FirebaseAuthException catch (e) {
-      final loginErrorCode = switch (e.code) {
-        'invalid-email' => LoginErrorCode.invalidEmail,
-        'user-disabled' => LoginErrorCode.userDisabled,
-        'user-not-found' => LoginErrorCode.userNotFound,
-        'wrong-password' => LoginErrorCode.wrongPassword,
-        'too-many-requests' => LoginErrorCode.tooManyRequests,
-        'user-token-expired' => LoginErrorCode.userTokenExpired,
-        'network-request-failed' => LoginErrorCode.networkRequestFailed,
-        'invalid-credential' => LoginErrorCode.invalidCredential,
-        'operation-not-allowed' => LoginErrorCode.operationNotAllowed,
-        _ => LoginErrorCode.unknown,
-      };
-
-      throw LoginException(code: loginErrorCode);
+      throw AuthenticationException(
+        code: mapAuthenticationErrorCode(e.code),
+      );
     }
   }
 
@@ -126,18 +100,9 @@ class FirebaseAuthRepository implements AuthRepository {
       await _userLocalDataSource.saveUser(user);
       return user;
     } on FirebaseAuthException catch (e) {
-      final signUpErrorCode = switch (e.code) {
-        'email-already-in-use' => SignUpErrorCode.emailAlreadyInUse,
-        'invalid-email' => SignUpErrorCode.invalidEmail,
-        'operation-not-allowed' => SignUpErrorCode.operationNotAllowed,
-        'weak-password' => SignUpErrorCode.weakPassowrd,
-        'too-many-requests' => SignUpErrorCode.tooManyRequests,
-        'user-token-expired' => SignUpErrorCode.userTokenExpired,
-        'network-request-failed' => SignUpErrorCode.networkRequestFailed,
-        _ => SignUpErrorCode.unknown,
-      };
-
-      throw SignUpException(code: signUpErrorCode);
+      throw AuthenticationException(
+        code: mapAuthenticationErrorCode(e.code),
+      );
     }
   }
 
