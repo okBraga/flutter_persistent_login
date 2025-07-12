@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_persistent_login/core/di/injection.dart';
-import 'package:flutter_persistent_login/core/shared/widgets/primary_button.dart';
+import 'package:flutter_persistent_login/core/widgets/primary_button.dart';
 import 'package:flutter_persistent_login/core/routes/app_routes.dart';
 import 'package:flutter_persistent_login/features/sign_up/cubit/sign_up_cubit.dart';
 import 'package:flutter_persistent_login/helpers/input_decoration.dart';
