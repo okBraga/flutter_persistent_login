@@ -122,7 +122,7 @@ lib/
 
 ## 👨‍💻 Autor
 
-**Seu Nome**
+**Filipe Braga**
 - LinkedIn: [okBraga](https://www.linkedin.com/in/okbraga/)
 - GitHub: [okBraga](https://github.com/okBraga)
 
