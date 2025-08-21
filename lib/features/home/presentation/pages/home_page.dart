@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final homeCubit = getIt.get<HomeCubit>();
+  final homeCubit = getDependency<HomeCubit>();
 
   @override
   void initState() {

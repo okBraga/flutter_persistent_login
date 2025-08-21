@@ -22,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordController = TextEditingController();
   final _repeatPasswordController = TextEditingController();
 
-  final signUpCubit = getIt.get<SignUpCubit>();
+  final signUpCubit = getDependency<SignUpCubit>();
 
   void _unfocus() {
     FocusScope.of(context).unfocus();

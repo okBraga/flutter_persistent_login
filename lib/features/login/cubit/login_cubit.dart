@@ -36,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
     emit(LoginLoading());
 
     try {
-      final user = await _authDataSource.signIn(email, password);
+      await _authDataSource.signIn(email, password);
       emit(LoginSuccess());
     } on AuthenticationException catch (e) {
       final errorMessage = mapErrorMessage(e.code);

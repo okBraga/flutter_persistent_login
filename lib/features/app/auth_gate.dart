@@ -11,9 +11,10 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
+  
   Future<void> verifyUser() async {
     try {
-      final user = await getIt.get<UserLocalDatasource>().getUser();
+      final user = await getDependency<UserLocalDatasource>().getUser();
 
       final route = user == null ? AppRoutes.login : AppRoutes.home;
 

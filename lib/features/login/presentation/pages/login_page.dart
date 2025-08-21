@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  final loginCubit = getIt.get<LoginCubit>();
+  final loginCubit = getDependency<LoginCubit>();
 
   @override
   void dispose() {

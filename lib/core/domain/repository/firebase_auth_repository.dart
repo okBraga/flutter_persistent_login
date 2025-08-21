@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_persistent_login/core/data/datasource/local/user_local_datasource.dart';
+import 'package:flutter_persistent_login/core/data/datasource/remote/login_remote_datasource.dart';
 import 'package:flutter_persistent_login/core/data/datasource/remote/user_remote_datasource.dart';
 import 'package:flutter_persistent_login/core/domain/entity/user_entity.dart';
 import 'package:injectable/injectable.dart';
@@ -50,21 +51,19 @@ abstract class AuthRepository {
 
 @Injectable(as: AuthRepository)
 class FirebaseAuthRepository implements AuthRepository {
-  final FirebaseAuth _firebaseAuth;
+  final LoginRemoteDatasource _loginDatasource;
   final UserRemoteDatasource _userRemoteDatasource;
   final UserLocalDatasource _userLocalDataSource;
 
-  FirebaseAuthRepository(this._firebaseAuth, this._userRemoteDatasource, this._userLocalDataSource);
+  FirebaseAuthRepository(this._loginDatasource, this._userRemoteDatasource, this._userLocalDataSource);
 
   @override
   Future<UserEntity> signIn(String email, String password) async {
     try {
-      final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+      final uid = await _loginDatasource.login(
+        LoginRequest(email: email, password: password),
       );
 
-      final uid = userCredential.user?.uid;
       if (uid == null) {
         throw Exception('Usuário não encontrado');
       }
@@ -86,16 +85,20 @@ class FirebaseAuthRepository implements AuthRepository {
   @override
   Future<UserEntity> signUp(String email, String password, String name) async {
     try {
-      final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
+      final uid = await _loginDatasource.signup(
+        SignupRequest(email: email, password: password),
       );
 
-      final uid = userCredential.user?.uid;
       if (uid == null) {
         throw Exception('Erro ao criar usuário');
       }
-      final user = UserEntity(id: uid, email: email, name: name);
+
+      final user = UserEntity(
+        id: uid,
+        email: email,
+        name: name,
+      );
+      
       await _userRemoteDatasource.save(user);
       await _userLocalDataSource.saveUser(user);
       return user;
@@ -108,7 +111,7 @@ class FirebaseAuthRepository implements AuthRepository {
 
   @override
   Future<void> logout() async {
-    await _firebaseAuth.signOut();
+    await _loginDatasource.signOut();
     await _userLocalDataSource.deletUser();
   }
 }
