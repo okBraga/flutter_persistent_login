@@ -14,6 +14,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import '../../features/home/cubit/home_cubit.dart' as _i1032;
+import '../../features/login/cubit/login_controller.dart' as _i443;
 import '../../features/login/cubit/login_cubit.dart' as _i209;
 import '../../features/sign_up/cubit/sign_up_cubit.dart' as _i745;
 import '../data/datasource/local/storage_adapter.dart' as _i434;
@@ -56,6 +57,8 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i827.AuthRepository>(),
           gh<_i455.UserLocalDatasource>(),
         ));
+    gh.factory<_i443.LoginController>(
+        () => _i443.LoginController(gh<_i827.AuthRepository>()));
     return this;
   }
 }
